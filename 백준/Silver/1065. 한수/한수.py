@@ -46,3 +46,14 @@ for i in ans:
     
 
 print(out)
+
+
+        
+        
+
+
+
+
+
+
+

@@ -42,3 +42,8 @@ for i in range(N):
             seeable[i] = seeable[i] + 1
 
 print(max(seeable))
+
+
+
+
+
