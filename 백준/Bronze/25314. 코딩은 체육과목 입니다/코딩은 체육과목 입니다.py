@@ -1,1 +1,1 @@
-N=int(input())//4;print("long "*N +"int")
+print(int(input())//4*'long '+'int')
