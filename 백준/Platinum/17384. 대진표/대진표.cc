@@ -9,18 +9,19 @@ const int MAX = (1 << 20);
 int n, arr[MAX], s;
 
 int get(int num) {
+    int res = 0;
     for (int i = 0; i < 21; i++) {
-        int m = 1 << i;
-        if (abs(num - m) <= (1 << (i - 1))) {
-            return m / 2;
+        if (num <= (1 << i)) {
+            res = (1 << i); break;
         }
     }
-    return - 1;
+    return res / 2;
 }
 
 void divide (int l, int r, int num) {
     int sz = (r - l + 1), mid = (l + r) / 2;
 
+  //  cout << l << " " << r << " " << num << "\n";
     if (num == 0) return;
     
     else if (num == sz) {
@@ -28,23 +29,31 @@ void divide (int l, int r, int num) {
         return;
     }
 
-    else if (num <= sz / 2) { // 왼쪽으로 전부 몰아 넣을 수 있다면
+    else if (num <= sz / 2) { // 만약 2의 거듭제곱이라면 
         return divide(l, mid, num); // 왼쪽으로 몰아주기 
     }
 
     // 이 아래는 num > (sz / 2) 만 있음
-    int res = get(num);
-    
-    divide(l, mid, max(res, num - res));
-    divide(mid + 1, r, min(res, num - res));
-    return;
 
+    else if (num - (sz / 2) > sz / 4) {
+        divide(l, mid, sz / 2);
+        divide(mid + 1, r, num - (sz / 2));
+        return;
+    }
+    // 이 아래는 sz / 2로 나눌 수 없음
+
+    int lnum = num / 2, rnum = num / 2;
+    if (num % 2 == 1) lnum += 1;
+    int tmp = get(lnum);
+
+    divide(l, mid, max(num - tmp, tmp));
+    divide(mid + 1, r, min(num - tmp, tmp));
 }  
 
 signed main() {
     ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     cin >> n;
-
+   // cout << get(41) << "81\n";
     for (int i = 0; i < 21; i++) {
         if (n <= (1 << i)) {
             s = (1 << i); break;
