@@ -13,7 +13,7 @@ def isSame(now, end):
 
 def save(now):
     global cnt
-    for i in range(8):
+    for i in range(4):
         if now + i not in D:
             D[now + i] = cnt + i + 1
         D[now + i] = min(cnt + i + 1, D[now + i])
@@ -35,8 +35,6 @@ for _ in range(T):
         now //= 2
         save(now)
         
-    
-    
     while (now != end):
         nw, ed = str(bin(now)), str(bin(end))
         now *= 2
