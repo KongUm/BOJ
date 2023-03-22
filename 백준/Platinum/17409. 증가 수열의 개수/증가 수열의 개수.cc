@@ -1,17 +1,11 @@
 #include <bits/stdc++.h>
 #define int long long
 #define ll long long
-#define fi first
-#define se second
-#define all(a) (a).begin(), (a).end()
-#define debug(x) cout << (#x) << ": " << (x) << '\n'
 
 using namespace std;
-using pii = pair<int, int>;
-using ti3 = tuple<int, int, int>;
 const int MAX = 100010, DIV = (int) 1e9 + 7;
 int n, k, ans, arr[MAX], segTree[12][MAX], dp[MAX][12];
-// dp[i][j] = 마지막으로 i번째 수를 선택 했고 j개의 수열로 이루어져있고, 
+// dp[i][j] = 마지막으로 i번째 수를 선택 했고 j개의 수열로 이루어져있을 때의 경우의 수
 
 void update(int t, int i, int value) {
     while (i <= MAX) {
