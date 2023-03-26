@@ -31,7 +31,6 @@ sgt prop(sgt A, int val, int typ) {
     else return { A.min, A.max };
 }
 
-
 void update_lazy(int st, int ed, int nd) {
     if (lazy[nd].min != -1) {
         segTree[nd] = prop(segTree[nd], lazy[nd].min, 1); // min 업데이트 (typ 1);
@@ -58,8 +57,8 @@ void update(int st, int ed, int nd, int ul, int ur, int val, int typ) {
     if (ur < st || ed < ul) return;
 
     if (ul <= st && ed <= ur) {
-        segTree[nd] = prop(segTree[nd], val, typ); // 업데이트
-        if (st != ed) { // lazy에 전파
+        segTree[nd] = prop(segTree[nd], val, typ); 
+        if (st != ed) { // 하위 노드 lazy에 전파
             lazy[nd * 2] = prop(lazy[nd * 2], val, typ);
             lazy[nd * 2 + 1] = prop(lazy[nd * 2 + 1], val, typ);
         }
@@ -95,11 +94,6 @@ signed main() {
         cin >> q >> l >> r >> h;
         update(0, n - 1, 1, l, r, h, q);
     }
-
-    // for (int i = 0; i < n * 4; i++) {
-    //     sgt tmp = segTree[i];
-    //     cout << tmp.min << " " << tmp.max << "\n";
-    // }
 
     for (int i = 0; i < n; i++) {
         sgt tmp = query(0, n - 1, 1, i, i);
