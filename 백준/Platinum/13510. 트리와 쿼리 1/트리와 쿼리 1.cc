@@ -93,7 +93,6 @@ void update(int idx, int w) {
 
 int query(int a, int b) {
     int ret = 0;
-    if (a == b) return 0;
     while (top[a] != top[b]) { // a와 b가 같은 체인이 될때까지 반복
         if (dep[top[a]] < dep[top[b]]) swap(a, b); // dep[top[a]] > dep[top[b]]가 되도록 바꿔줌 
         ret = max(ret, seg.query(1, MAX, 1, in[top[a]], in[a]));
