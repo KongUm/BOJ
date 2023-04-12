@@ -28,7 +28,7 @@ signed main() {
     cin >> n;
     for (int i = 0; i < n; i++) cin >> cord[i].x >> cord[i].y;
     
-    for (int i = 2; i < n; i++) res += ((cord[i] - cord[0]) ^ (cord[i - 1] - cord[0]));
+    for (int i = 2; i < n; i++) res += ((cord[i - 1] - cord[0]) ^ (cord[i] - cord[0]));
     res = abs(res);
     cout << fixed; cout.precision(1);
     cout << (double) round(res * 5) / 10;
