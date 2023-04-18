@@ -1,14 +1,6 @@
 #include <bits/stdc++.h>
-#define int long long
-#define ll long long
-#define fi first
-#define se second
-#define all(a) (a).begin(), (a).end()
-#define debug(x) cout << (#x) << ": " << (x) << '\n'
-
 using namespace std;
-using pii = pair<int, int>;
-using ti3 = tuple<int, int, int>;
+
 const int MAX = 100010, INF = (int) 1e9 + 7;
 int x, y, d, t, cnt = 0;
 double res = INF, dist;
