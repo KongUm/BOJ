@@ -27,7 +27,7 @@ stack<Point> stack1;
 bool cmp(Point a, Point b) {
     Point pa = a - lp, pb = b - lp;
     int ret = pa ^ pb;
-    if (ret == 0) return (abs(pa.x) + abs(pa.y)) < (abs(pb.x) + abs(pb.y)); // 일직선 상에 있다면 가까이 있는 게 먼저
+    if (ret == 0) return (abs(pa.x) + abs(pa.y)) < (abs(pb.x) + abs(pb.y));
     else return ret < 0;
 }
 
@@ -37,7 +37,7 @@ signed main() {
     cin >> n;
     for (int i = 0; i < n; i++) { 
         cin >> a >> b; crd.push_back({ a, b });
-        if (b < lp.y || (lp.y == b && a < lp.x)) lp = { a, b }; // find the lowest y-crd
+        if (b < lp.y || (lp.y == b && a < lp.x)) lp = { a, b }; 
     }
     sort(all(crd), cmp);
 
