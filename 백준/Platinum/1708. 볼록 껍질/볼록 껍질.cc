@@ -20,22 +20,13 @@ Point operator - (Point a, Point b) { return { a.x - b.x, a.y - b.y }; }
 ll operator * (Point a, Point b) { return { (ll) a.x * b.x + (ll) a.y * b.y };}
 ll operator ^ (Point a, Point b) { return { (ll) a.x * b.y - (ll) a.y * b.x }; }
 
-int n;
-Point lp = { INF, INF };
+int n; Point lp = { INF, INF };
 vector<Point> crd;
 stack<Point> stack1;
-
-int ccw(Point a, Point b, Point c) {
-    auto v = (a - b) ^ (c - b);
-    if (v < 0) return 1; // 반시계 방향
-    else if (v > 0) return -1; // 시계 방향
-    return 0; // 일직선 상
-}
 
 bool cmp(Point a, Point b) {
     Point pa = a - lp, pb = b - lp;
     int ret = pa ^ pb;
-
     if (ret == 0) return (abs(pa.x) + abs(pa.y)) < (abs(pb.x) + abs(pb.y)); // 일직선 상에 있다면 가까이 있는 게 먼저
     else return ret < 0;
 }
@@ -53,12 +44,9 @@ signed main() {
     int idx = 0;
     while (idx < n) {
         while (stack1.size() >= 2) {
-            auto p2 = stack1.top(); stack1.pop();
+            auto p2 = stack1.top(); stack1.pop(); 
             auto p1 = stack1.top();
-            if (ccw(p1, p2, crd[idx]) < 0) {
-                stack1.push(p2);
-                break;
-            }
+            if (((p1 - crd[idx]) ^ (p2 - crd[idx])) < 0) { stack1.push(p2); break; }
         }
         stack1.push(crd[idx++]);
     }
