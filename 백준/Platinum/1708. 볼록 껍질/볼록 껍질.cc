@@ -14,9 +14,16 @@ Point operator - (Point a, Point b) { return { a.x - b.x, a.y - b.y }; }
 ll operator * (Point a, Point b) { return { (ll) a.x * b.x + (ll) a.y * b.y };}
 ll operator ^ (Point a, Point b) { return { (ll) a.x * b.y - (ll) a.y * b.x }; }
 
+int getDist(Point a) { return (a.x * a.x + a.y * a.y); }
+
+double getArc(Point A, Point B, Point C) { // angle ABC -> seta B
+    int a = getDist(B - C), b = getDist(C - A), c = getDist(A - B);
+    double cos = ((a + c - b) / (2 * sqrt(a * c)));
+    return acos(cos);
+}
+
 int n; Point lp = { INF, INF };
-vector<Point> crd;
-stack<Point> stack1;
+vector<Point> crd, hull;
 
 bool cmp(Point a, Point b) {
     Point pa = a - lp, pb = b - lp;
@@ -25,24 +32,40 @@ bool cmp(Point a, Point b) {
     else return ret < 0;
 }
 
-signed main() {
-    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int a, b;
-    cin >> n;
-    for (int i = 0; i < n; i++) { 
-        cin >> a >> b; crd.push_back({ a, b });
-        if (b < lp.y || (lp.y == b && a < lp.x)) lp = { a, b }; 
-    }
+void grahamScan() {
     sort(all(crd), cmp);
 
     int idx = 0;
     while (idx < n) {
-        while (stack1.size() >= 2) {
-            auto p2 = stack1.top(); stack1.pop(); 
-            auto p1 = stack1.top();
-            if (((p1 - crd[idx]) ^ (p2 - crd[idx])) < 0) { stack1.push(p2); break; }
+        while (hull.size() >= 2) {
+            auto p2 = hull.back(); hull.pop_back(); 
+            auto p1 = hull.back();
+            if (((p1 - crd[idx]) ^ (p2 - crd[idx])) < 0) { hull.push_back(p2); break; }
         }
-        stack1.push(crd[idx++]);
+        hull.push_back(crd[idx++]);
     }
-    cout << stack1.size();
+}
+
+signed main() {
+    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    int a, b;
+    cin >> n;
+
+    int l; vector<Point> tmpC;
+    for (int i = 0; i < n; i++) { 
+        cin >> a >> b; tmpC.push_back({ a, b });
+        if (b < lp.y || (lp.y == b && a < lp.x)) { lp = { a, b }; l = i; }  
+    }
+
+
+    crd.push_back(tmpC[l]);
+    for (int i = 0; i < n; i++) {
+        if (i != l) {
+            crd.push_back(tmpC[i]);
+        }
+    }
+
+
+    grahamScan();
+    cout << hull.size();
 }
