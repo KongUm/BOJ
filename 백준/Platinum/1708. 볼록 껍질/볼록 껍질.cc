@@ -22,18 +22,18 @@ double getArc(Point A, Point B, Point C) { // angle ABC -> seta B
     return acos(cos);
 }
 
-int n; Point lp = { INF, INF };
+int n;;
 vector<Point> crd, hull;
 
 bool cmp(Point a, Point b) {
-    Point pa = a - lp, pb = b - lp;
+    Point pa = a - crd[0], pb = b - crd[0];
     int ret = pa ^ pb;
     if (ret == 0) return (abs(pa.x) + abs(pa.y)) < (abs(pb.x) + abs(pb.y));
     else return ret < 0;
 }
 
 void grahamScan() {
-    sort(all(crd), cmp);
+    sort(crd.begin() + 1, crd.end(), cmp);
 
     int idx = 0;
     while (idx < n) {
@@ -50,22 +50,10 @@ signed main() {
     ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     int a, b;
     cin >> n;
-
-    int l; vector<Point> tmpC;
     for (int i = 0; i < n; i++) { 
-        cin >> a >> b; tmpC.push_back({ a, b });
-        if (b < lp.y || (lp.y == b && a < lp.x)) { lp = { a, b }; l = i; }  
+        cin >> a >> b; crd.push_back({ a, b });
+        if (b < crd[0].y || (b == crd[0].y && a < crd[0].x)) swap(crd[0], crd[i]); 
     }
-
-
-    crd.push_back(tmpC[l]);
-    for (int i = 0; i < n; i++) {
-        if (i != l) {
-            crd.push_back(tmpC[i]);
-        }
-    }
-
-
     grahamScan();
     cout << hull.size();
 }
