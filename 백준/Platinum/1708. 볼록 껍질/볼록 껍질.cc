@@ -16,19 +16,13 @@ ll operator ^ (Point a, Point b) { return { (ll) a.x * b.y - (ll) a.y * b.x }; }
 
 int getDist(Point a) { return (a.x * a.x + a.y * a.y); }
 
-double getArc(Point A, Point B, Point C) { // angle ABC -> seta B
-    int a = getDist(B - C), b = getDist(C - A), c = getDist(A - B);
-    double cos = ((a + c - b) / (2 * sqrt(a * c)));
-    return acos(cos);
-}
-
-int n;;
+int n; 
 vector<Point> crd, hull;
 
 bool cmp(Point a, Point b) {
     Point pa = a - crd[0], pb = b - crd[0];
     int ret = pa ^ pb;
-    if (ret == 0) return (abs(pa.x) + abs(pa.y)) < (abs(pb.x) + abs(pb.y));
+    if (ret == 0) return getDist(pa) < getDist(pb);
     else return ret < 0;
 }
 
