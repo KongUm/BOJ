@@ -1,102 +1,219 @@
 #include <bits/stdc++.h>
-#define int long long
-#define ll long long
-#define fi first
-#define se second
-#define all(a) (a).begin(), (a).end()
-#define debug(x) cout << (#x) << ": " << (x) << '\n'
+
+#define MAX 2000001
+
+#define INF 987654321
 
 using namespace std;
-using pii = pair<int, int>;
-using ti3 = tuple<int, int, int>;
-const int MAX = 2000010, INF = (int) 1e9 + 7;
-int n, k;
 
-struct sgt {
+struct node {
+
     int min, max;
+
+    node() {min = max = 0;}
+
+    node(int n, int m) : min(n), max(m) {}
+
 };
 
-sgt segTree[MAX * 4];
-sgt lazy[MAX * 4];
+const int TREE_MAX = 1 << (int)(ceil(log2(MAX) + 1));
 
-sgt merge(sgt A, sgt B) {
-    return { min(A.min, B.min), max(A.max, B.max) };
+node seg[TREE_MAX];
+
+node lazy[TREE_MAX] = {node(-1, INF), };
+
+int n, q;
+
+/*
+
+    lazy propagation
+
+*/
+
+node add(node curr, int val) {
+
+   // curr.max = max(curr.max, val);
+
+    curr.min = max(curr.min, val);
+
+    if(curr.min > curr.max) curr.min = curr.max = val;
+
+    return {curr.min, curr.max};
+
 }
 
-sgt prop(sgt A, int val, int typ) {
-    if (typ == 1) A.min = max(A.min, val); // Query 1
-    else A.max = min(A.max, val);          // Query 2
+node sub(node curr, int val) {    
 
-    if (A.min > A.max) return { val, val };
-    else return { A.min, A.max };
+    curr.max = min(curr.max, val);
+
+   // curr.min = min(curr.min, val);
+
+    if(curr.min > curr.max) curr.min = curr.max = val;
+
+    return {curr.min, curr.max};
+
 }
 
-void update_lazy(int st, int ed, int nd) {
-    if (lazy[nd].min != -1) {
-        segTree[nd] = prop(segTree[nd], lazy[nd].min, 1); // min 업데이트 (typ 1);
-        if (st != ed) {
-            lazy[nd * 2] = prop(lazy[nd * 2], lazy[nd].min, 1);
-            lazy[nd * 2 + 1] = prop(lazy[nd * 2 + 1], lazy[nd].min, 1);
+void im_feeling_lazy(int curr, int start, int end) {
+
+    if(lazy[curr].min != -1) {
+
+        seg[curr] = add(seg[curr], lazy[curr].min);
+
+         if(start != end) {
+
+            lazy[curr*2] = add(lazy[curr*2], lazy[curr].min);
+
+            lazy[curr*2+1] = add(lazy[curr*2+1], lazy[curr].min);
+
+         }
+
+         lazy[curr].min = -1;
+
+    }
+
+    
+
+    if(lazy[curr].max != INF) {
+
+        seg[curr] = sub(seg[curr], lazy[curr].max);
+
+        if(start != end) {
+
+            lazy[curr*2] = sub(lazy[curr*2], lazy[curr].max);
+
+            lazy[curr*2+1] = sub(lazy[curr*2+1], lazy[curr].max);
+
         }
-        lazy[nd].min = -1;
+
+        lazy[curr].max = INF;
+
     }
 
-    if (lazy[nd].max != INF) {
-        segTree[nd] = prop(segTree[nd], lazy[nd].max, 2); // max 업데이트 (typ 2);
-        if (st != ed) {
-            lazy[nd * 2] = prop(lazy[nd * 2], lazy[nd].max, 2);
-            lazy[nd * 2 + 1] = prop(lazy[nd * 2 + 1], lazy[nd].max, 2);
-        }
-        lazy[nd].max = INF;
-    }
-} 
-
-void update(int st, int ed, int nd, int ul, int ur, int val, int typ) {
-    update_lazy(st, ed, nd);
-
-    if (ur < st || ed < ul) return;
-
-    if (ul <= st && ed <= ur) {
-        segTree[nd] = prop(segTree[nd], val, typ); 
-        if (st != ed) { // 하위 노드 lazy에 전파
-            lazy[nd * 2] = prop(lazy[nd * 2], val, typ);
-            lazy[nd * 2 + 1] = prop(lazy[nd * 2 + 1], val, typ);
-        }
-        return ;
-    }
-
-    int mid = (st + ed) / 2;
-    update(st, mid, nd * 2, ul, ur, val, typ);
-    update(mid + 1, ed, nd * 2 + 1, ul, ur, val, typ);
-    segTree[nd] = merge(segTree[nd * 2], segTree[nd * 2 + 1]);
 }
 
-sgt query(int st, int ed, int nd, int fl, int fr) {
-    update_lazy(st, ed, nd);
+ 
 
-   if (fr < st || fl > ed) return { INF, -1 };
-   if (fl <= st && fr >= ed) return segTree[nd];
+void update(int curr, int start, int end, int t_start, int t_end, int arg, int val){
 
-   int mid = (st + ed) / 2;
-   sgt l = query(st, mid, nd * 2, fl, fr);
-   sgt r = query(mid + 1, ed, nd * 2 + 1, fl, fr);
-   return merge(l, r);
+    im_feeling_lazy(curr, start, end);
+
+    if(t_end < start || end < t_start) return;
+
+    if(t_start <= start && end <= t_end) {
+
+        if(arg == 1){
+
+            seg[curr] = add(seg[curr], val);
+
+            lazy[curr*2] = add(lazy[curr*2], val);
+
+            lazy[curr*2+1] = add(lazy[curr*2+1], val); 
+
+        } else {
+
+            seg[curr] = sub(seg[curr], val);
+
+            lazy[curr*2] = sub(lazy[curr*2], val);
+
+            lazy[curr*2+1] = sub(lazy[curr*2+1], val);
+
+        }
+
+        return;
+
+    }
+
+    
+
+    int mid = (start + end) >> 1;
+
+    update(curr * 2, start, mid, t_start, t_end, arg, val);
+
+    update(curr * 2 + 1, mid + 1, end, t_start, t_end, arg, val);
+
+    seg[curr].min = min(seg[curr*2].min, seg[curr*2+1].min);
+
+    seg[curr].max = max(seg[curr*2].max, seg[curr*2+1].max);
+
 }
 
-signed main() {
-    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int q, l, r, h;
-    cin >> n >> k;
+void getHeight(int curr, int start, int end, int idx) {
 
-    for (int i = 0; i < MAX * 4; i++) lazy[i] = { -1, INF };
+    im_feeling_lazy(curr, start, end);
 
-    for (int i = 0; i < k; i++) {
-        cin >> q >> l >> r >> h;
-        update(0, n - 1, 1, l, r, h, q);
+    if(idx < start || end < idx) return;
+
+    if(start == end) {
+
+      cout<<seg[curr].max<<'\n';
+
+      return;
+
     }
 
-    for (int i = 0; i < n; i++) {
-        sgt tmp = query(0, n - 1, 1, i, i);
-        cout << tmp.min << "\n";
+    
+
+    int mid = (start + end) >> 1;
+
+    getHeight(curr*2, start, mid, idx);
+
+    getHeight(curr*2+1, mid+1, end, idx);
+
+}
+
+void fastIO() {
+
+    ios::sync_with_stdio(false); cin.tie(0);
+
+}
+
+void input(){
+
+    cin>>n;
+
+}
+
+void solve() {
+
+    int arg, l, r, v;
+
+    cin>>q;
+
+    for(int i = 0; i < q; i++) {
+
+        cin>>arg>>l>>r>>v;
+
+        if(arg == 1) {
+
+            update(1, 0, n-1, l, r, 1, v);
+
+        } else {
+
+            update(1, 0, n-1, l, r, 2, v);
+
+        } 
+
     }
+
+    
+
+    for(int i = 0; i<n; i++) {
+
+        getHeight(1, 0, n-1, i);
+
+    }
+
+}
+
+int main() {
+
+    fastIO();
+
+    input();
+
+    solve();
+
+    return 0;
+
 }
