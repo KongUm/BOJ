@@ -1,17 +1,12 @@
 #include <bits/stdc++.h>
 #define int long long
-#define ll long long
-#define double long double
 #define fi first
 #define se second
-#define all(a) (a).begin(), (a).end()
 using namespace std;
 using pii = pair<int, int>;
-using ti3 = tuple<int, int, int>;
 const int MAX = 100010, INF = (int) 1e9 + 7;
 int n, arr[3], maxi = 0, mini = INF;
 pii dp[2][3] ;
-
 
 signed main() {
     ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
