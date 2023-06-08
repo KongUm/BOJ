@@ -1,20 +1,8 @@
 #include <bits/stdc++.h>
 #define int long long
-#define ll long long
-#define double long double
-#define fi first
-#define se second
-#define all(a) (a).begin(), (a).end()
-#define debug(x) cout << (#x) << ": " << (x) << '\n'
-
 using namespace std;
-using pii = pair<int, int>;
-using ti3 = tuple<int, int, int>;
 const int MAX = 50;
 int n, arr[MAX][MAX], dp[MAX][MAX][3];
-
-// 음 이동 방향으로 
-// ok
 
 signed main() {
     ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
@@ -36,9 +24,6 @@ signed main() {
         }
     }
     int s = 0;
-
-
-
     for (int i = 0; i < 3; i++) s += dp[n][n][i];
     cout << s;
 }
