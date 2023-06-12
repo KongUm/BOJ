@@ -1,15 +1,6 @@
 #include <bits/stdc++.h>
 #define int long long
-#define ll long long
-#define double long double
-#define fi first
-#define se second
-#define all(a) (a).begin(), (a).end()
-#define debug(x) cout << (#x) << ": " << (x) << '\n'
-
 using namespace std;
-using pii = pair<int, int>;
-using ti3 = tuple<int, int, int>;
 const int MAX = 1010;
 int n, m, cnt, dsu[MAX * MAX];
 string s = "RLUD";
