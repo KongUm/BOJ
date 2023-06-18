@@ -42,10 +42,10 @@ string guess_sequence(int N) {
     }
 
     if (now.size() < N) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             if (press(now + alp[i]) == N) { now = now + alp[i]; break; } 
         }
-        if (now.size() < N) now = now + alp[3];
+        if (now.size() < N) now = now + alp[2];
     }
     return now;
 }
