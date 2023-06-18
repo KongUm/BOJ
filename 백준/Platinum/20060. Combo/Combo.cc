@@ -1,6 +1,7 @@
 #include "combo.h"
 using namespace std;
 
+
 string guess_sequence(int N) {
     int r = N + 2;
     string now, alp, bt = "ABXY";
@@ -15,27 +16,29 @@ string guess_sequence(int N) {
 
     while (now.size() < N - 1) { // r 조건 추가 필요
         int sz = now.size();
-        string tmp = now + alp[0] + alp[1] + now + alp[1] + alp[0];
+        string tmp;
+        tmp = tmp + now + alp[0] + alp[0];
+        tmp = tmp + now + alp[1] + alp[0];
+        tmp = tmp + now + alp[1] + alp[1];
+        
         int ret = press(tmp); r--;
 
         if (ret == sz) now += alp[2];
-        else if (ret == sz + 1) { // 둘 다 같은 경우 or 13 or 23
-            tmp = now + alp[0] + alp[0]; r--;
+        else if (ret == sz + 1) { // AB AX BX
+            tmp = now + alp[0] + alp[1]; // AB press
             ret = press(tmp);
-            if (ret == sz + 2) now = now + alp[0] + alp[0];
-            else if (ret == sz + 1) now = now + alp[0] + alp[2];
-            else {
-                tmp = now + alp[1] + alp[1];
-                ret = press(tmp); r--;
-                if (ret == sz + 2) now = now + alp[1];
-                else now = now + alp[1] + alp[2];
-            }
+            if (ret == sz) now = now + alp[1] + alp[2]; // BX
+            else if (ret == sz + 1) now = now + alp[0] + alp[2]; // AX
+            else now = now + alp[0] + alp[1]; // AB
         }
-        else {
-            tmp = now + alp[0] + alp[1]; r--;
-            if (press(tmp) == sz + 2) now = now + alp[0] + alp[1];
-            else now = now + alp[1] + alp[0];
+        else { // AA BA BB
+            tmp = now + alp[1] + alp[0]; // BA press
+            ret = press(tmp);
+            if (ret == sz) now = now + alp[0] + alp[0]; // AA
+            else if (ret == sz + 1) now = now + alp[1] + alp[1]; // BB
+            else now = now + alp[1] + alp[0]; // BA
         }
+
     }
 
     if (now.size() < N) {
@@ -44,6 +47,6 @@ string guess_sequence(int N) {
         }
         if (now.size() < N) now = now + alp[3];
     }
-
     return now;
 }
+
