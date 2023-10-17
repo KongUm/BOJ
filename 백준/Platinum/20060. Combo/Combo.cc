@@ -6,11 +6,15 @@ string guess_sequence(int N) {
     int r = N + 2;
     string now, alp, bt = "ABXY";
     
-    for (int i = 0; i < 3; i++) {
-        string tmp = ""; tmp += bt[i], r--;
-        if (press(tmp) == 1) { now += bt[i]; break; }
+    string tmp = "AB"; 
+    if (press(tmp) >= 1) {
+        if (press("A")) now += "A";
+        else now += "B";
     }
-    if (now.size() == 0) now += bt[3];
+    else {
+        if (press("X")) now += "X";
+        else now += "Y";
+    }
 
     for (int i = 0; i < 4; i++) if (now[0] != bt[i]) alp += bt[i];
 
@@ -49,4 +53,3 @@ string guess_sequence(int N) {
     }
     return now;
 }
-
