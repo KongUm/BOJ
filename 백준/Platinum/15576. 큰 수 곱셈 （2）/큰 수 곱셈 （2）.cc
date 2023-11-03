@@ -38,7 +38,7 @@ vector<cpx> convolution(vector<cpx> a, vector<cpx> b){
 	return c;
 }
 
-vector<cpx> stringToVec (string s) { 
+vector<cpx> stringToVec(string s) { 
 	int len = s.size();
 	vector<cpx> v(len);
 
@@ -50,34 +50,31 @@ vector<cpx> stringToVec (string s) {
 	return v;
 }
 
-string viToString (vector<int> v, int sz) {
+string vecToString(vector<cpx> v, int sz) {
     string ret = "";
     for (int i = 0; i < sz; i++) {
-        ret += to_string(v[i] % 10);
-        if (i != sz - 1) v[i + 1] += (v[i] / 10);
+        ret += to_string(((int) v[i].real()) % 10);
+        if (i != sz - 1) v[i + 1] += (v[i].real() / 10);
     }
     reverse(ret.begin(), ret.end());
     return ret;
 }
 
-string mul (string a, string b) {
+string multiply(string a, string b) {
     vector<cpx> va, vb, vc;
     if (a == "0" || b == "0") return "0";
     va = stringToVec(a);
     vb = stringToVec(b);
     vc = convolution(va, vb);
 
-    vector<int> v;
     int sz = 2 * max(a.size(), b.size());
-    for (int i = 0; i < sz; i++) v.push_back(vc[i].real());
-    
-    return viToString(v, sz);
+    return vecToString(vc, sz);
 }
 
 signed main() {
     ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     string sa, sb; cin >> sa >> sb;
-    string res = mul(sa, sb);
+    string res = multiply(sa, sb);
 
     int flag = 1;
     for (int i = 0; i < res.size(); i++) {
